@@ -27,13 +27,17 @@ public class StudentController {
     }
 
     @DeleteMapping("{id}")
-    public Student deleteStudent (@PathVariable Long id) {
-        return studentService.deleteStudent(id);
+    public void deleteStudent (@PathVariable Long id) {
+        studentService.deleteStudent(id);
     }
 
     @GetMapping("{id}")
     public Student getStudent (@PathVariable Long id) {
         return studentService.findStudent(id);
+    }
+    @GetMapping
+    public Collection<Student> findAll (){
+        return studentService.findAll();
     }
 
     @PutMapping
@@ -41,11 +45,11 @@ public class StudentController {
         return studentService.editStudent(student);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Student>> sortByAge(@RequestParam int age) {
-        List<Student> studentsByAge = studentService.sortByAge(age);
-        return ResponseEntity.ok(studentsByAge);
-    }
+    //@GetMapping
+   // public ResponseEntity<List<Student>> sortByAge(@RequestParam int age) {
+        //List<Student> studentsByAge = studentService.sortByAge(age);
+        //return ResponseEntity.ok(studentsByAge);
+    //}
 
 
 }

@@ -1,6 +1,9 @@
 package ru.hogwarts.school_HomeWork_29.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school_HomeWork_29.Repository.StudentRepository;
 import ru.hogwarts.school_HomeWork_29.model.Student;
 
 import java.lang.reflect.Field;
@@ -13,31 +16,40 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
 
-    private final HashMap<Long, Student> students = new HashMap<>();
-    private Long studId = 0L;
+    @Autowired
+    private final StudentRepository studentRepository;
+
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     public Student addStudent(Student student) {
-        student.setId(++studId);
-        students.put(studId, student);
-        return student;
+        return studentRepository.save(student);
     }
 
     public Student findStudent(long id) {
-        return students.get(id);
+        return studentRepository.findById(id).orElseThrow();
+    }
+
+    public Collection<Student> findAll () {
+        return studentRepository.findAll();
     }
 
     public Student editStudent(Student student) {
-        students.put(student.getId(), student);
-        return student;
+        return studentRepository.save(student);
     }
 
-    public Student deleteStudent(long id) {
-        return students.remove(id);
+    public void deleteStudent(long id) {
+        studentRepository.deleteById(id);
     }
 
     public List<Student> sortByAge(int age) {
-        return students.values().stream()
-                .filter(student -> student.getAge() == age)
-                .collect(Collectors.toList());
+        return studentRepository.findByAge(age);
+        //return students.values().stream()
+                //.filter(student -> student.getAge() == age)
+                //.collect(Collectors.toList());
     }
+    //private Sort sortByAgeHelp () {
+      //  return new Sort();
+    //}
 }

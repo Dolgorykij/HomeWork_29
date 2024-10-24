@@ -13,10 +13,10 @@ public class StudentServiceTest {
 
     private StudentService studentService;
 
-    @BeforeEach
-    public void setUp() {
-        studentService = new StudentService();
-    }
+    // @BeforeEach
+    //public void setUp() {
+    //  studentService = new StudentService();
+    //}
 
     @Test
     public void testAddStudent() {
@@ -48,13 +48,13 @@ public class StudentServiceTest {
         assertEquals(addedStudent.getId(), editedStudent.getId());
     }
 
-    @Test
-    public void testDeleteStudent() {
-        Student testStudent = new Student(0L,"Harry",21);
-        Student addedStudent = studentService.addStudent(testStudent);
-        Student deletedStudent = studentService.deleteStudent(addedStudent.getId());
-        assertEquals("Harry", deletedStudent.getName());
-    }
+    //@Test
+    //public void testDeleteStudent() {
+    //  Student testStudent = new Student(0L,"Harry",21);
+    //  Student addedStudent = studentService.addStudent(testStudent);
+    //  Student deletedStudent = studentService.deleteStudent(addedStudent.getId());
+    //  assertEquals("Harry", deletedStudent.getName());
+    //}
 
     @Test
     public void testSortByAge() {

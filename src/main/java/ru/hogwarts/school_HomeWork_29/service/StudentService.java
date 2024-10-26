@@ -3,7 +3,10 @@ package ru.hogwarts.school_HomeWork_29.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.hogwarts.school_HomeWork_29.Repository.StudentRepository;
+import ru.hogwarts.school_HomeWork_29.model.Faculty;
 import ru.hogwarts.school_HomeWork_29.model.Student;
 
 import java.lang.reflect.Field;
@@ -43,11 +46,18 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public List<Student> sortByAge(int age) {
-        return studentRepository.findByAge(age);
+    public Collection<Student> sortByAge(int age) {
+        return studentRepository.findStudentByAge(age);
         //return students.values().stream()
                 //.filter(student -> student.getAge() == age)
                 //.collect(Collectors.toList());
+    }
+    public Collection<Student> findByAgeBetween (int min, int max) {
+        return studentRepository.findByAgeBetween(min, max);
+    }
+
+    public Collection<Student> findAllByFaculty (Long id) {
+        return studentRepository.findAllByFaculty_id(id);
     }
     //private Sort sortByAgeHelp () {
       //  return new Sort();

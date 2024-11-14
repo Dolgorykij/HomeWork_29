@@ -57,5 +57,5 @@ public class FacultyController {
     //public Collection<Faculty> findByStudent_id (@RequestParam Long id) {
        // return facultyService.findByStudent_id(id);
    // }
-
+//
 }

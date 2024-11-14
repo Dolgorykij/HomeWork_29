@@ -71,7 +71,7 @@ public class Avatar {
     public void setData(byte[] data) {
         this.data = data;
     }
-
+//
 }
 
 

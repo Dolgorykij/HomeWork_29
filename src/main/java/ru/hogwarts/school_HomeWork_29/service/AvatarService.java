@@ -58,7 +58,7 @@ public class AvatarService {
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
-
+//
     private String getExtensions (String fileName) {
         return fileName.substring(fileName.lastIndexOf(".")+1);
     }

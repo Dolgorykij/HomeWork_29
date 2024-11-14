@@ -2,12 +2,16 @@ package ru.hogwarts.school_HomeWork_29.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school_HomeWork_29.model.Faculty;
 import ru.hogwarts.school_HomeWork_29.model.Student;
+import ru.hogwarts.school_HomeWork_29.service.AvatarService;
 import ru.hogwarts.school_HomeWork_29.service.StudentService;
 
+import java.io.IOException;
 import java.util.Collection;
 
 
@@ -17,8 +21,11 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    public StudentController(StudentService studentService) {
+    private final AvatarService avatarService;
+
+    public StudentController(StudentService studentService, AvatarService avatarService) {
         this.studentService = studentService;
+        this.avatarService = avatarService;
     }
 
     @PostMapping
@@ -59,6 +66,7 @@ public class StudentController {
         Student student = studentService.findStudent(id);
         return student.getFaculty();
     }
+
         //List<Student> studentsByAge = studentService.sortByAge(age);
         //return ResponseEntity.ok(studentsByAge);
     //}

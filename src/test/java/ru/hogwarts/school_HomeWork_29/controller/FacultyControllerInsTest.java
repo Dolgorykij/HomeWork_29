@@ -1,6 +1,5 @@
 package ru.hogwarts.school_HomeWork_29.controller;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +12,10 @@ import ru.hogwarts.school_HomeWork_29.Repository.FacultyRepository;
 import ru.hogwarts.school_HomeWork_29.model.Faculty;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
-public class FacultyControllerIntegrationTest {
+class FacultyControllerInsTest {
 
     @LocalServerPort
     private int port;
@@ -30,10 +27,13 @@ public class FacultyControllerIntegrationTest {
     private TestRestTemplate testRestTemplate;
 
 
-    @BeforeEach
-    public void clearDB() {
-        facultyRepository.deleteAll();
-    }
+    //@BeforeEach
+    //public void clearDB() {
+       // facultyRepository.deleteAll();
+       // Faculty faculty = new Faculty();
+       // faculty.setName("Veresk");
+       // faculty.setColor("Veresk");
+   // }
 
     @Test
     public void contextLoads () throws Exception{

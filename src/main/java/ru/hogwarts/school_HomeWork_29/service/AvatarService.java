@@ -1,6 +1,6 @@
 package ru.hogwarts.school_HomeWork_29.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +11,7 @@ import ru.hogwarts.school_HomeWork_29.model.Student;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static io.swagger.v3.core.util.AnnotationsUtils.getExtensions;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
@@ -19,8 +20,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Transactional
 public class AvatarService {
 
-    @Value("${students.avatar.dir.path}")
-    private String avatarsDir;
+    //@Value("${students.avatar.dir.path}")
+    private String avatarsDir = "avatars";
 
     private final AvatarRepository avatarRepository;
     private final StudentService studentService;
@@ -61,5 +62,10 @@ public class AvatarService {
 //
     private String getExtensions (String fileName) {
         return fileName.substring(fileName.lastIndexOf(".")+1);
+    }
+
+
+    public List<Avatar> findAll(Integer pageNumber, Integer pageSize) {
+        return avatarRepository.findAll(PageRequest.of(pageNumber - 1, pageSize)).getContent();
     }
 }

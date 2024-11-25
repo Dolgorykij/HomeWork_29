@@ -1,20 +1,12 @@
 package ru.hogwarts.school_HomeWork_29.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.hogwarts.school_HomeWork_29.Repository.StudentRepository;
-import ru.hogwarts.school_HomeWork_29.model.Faculty;
 import ru.hogwarts.school_HomeWork_29.model.Student;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -58,6 +50,18 @@ public class StudentService {
 
     public Collection<Student> findAllByFaculty (Long id) {
         return studentRepository.findAllByFaculty_id(id);
+    }
+
+    public Integer getAllStudents () {
+        return studentRepository.getAllStudents();
+    }
+
+    public Integer getAverageAge () {
+        return studentRepository.getAverageAge();
+    }
+
+    public List<Student> getLastFiveStudents () {
+        return studentRepository.getLastFiveStudents();
     }
     //private Sort sortByAgeHelp () {
       //  return new Sort();

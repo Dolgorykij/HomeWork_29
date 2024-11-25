@@ -1,18 +1,15 @@
 package ru.hogwarts.school_HomeWork_29.controller;
 
 
-import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school_HomeWork_29.model.Faculty;
 import ru.hogwarts.school_HomeWork_29.model.Student;
-import ru.hogwarts.school_HomeWork_29.service.AvatarService;
 import ru.hogwarts.school_HomeWork_29.service.StudentService;
 
-import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 
 @RestController
@@ -21,11 +18,8 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    private final AvatarService avatarService;
-
-    public StudentController(StudentService studentService, AvatarService avatarService) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.avatarService = avatarService;
     }
 
     @PostMapping
@@ -66,6 +60,23 @@ public class StudentController {
         Student student = studentService.findStudent(id);
         return student.getFaculty();
     }
+
+    @GetMapping("/getAllStudents")
+    public ResponseEntity<Integer> getAllStudents() {
+        Integer count = studentService.getAllStudents();
+        return ResponseEntity.ok(count);
+    }
+    @GetMapping("/getAverageAge")
+    public ResponseEntity<Integer> getAverageAGe() {
+        Integer average = studentService.getAverageAge();
+        return ResponseEntity.ok(average);
+    }
+    @GetMapping("/getLastFiveStudents")
+    public ResponseEntity<List<Student>> getLastFiveStudents() {
+        List<Student> lastStudents = studentService.getLastFiveStudents();
+        return ResponseEntity.ok(lastStudents);
+    }
+
 
         //List<Student> studentsByAge = studentService.sortByAge(age);
         //return ResponseEntity.ok(studentsByAge);

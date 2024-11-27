@@ -1,5 +1,6 @@
 package ru.hogwarts.school_HomeWork_29.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school_HomeWork_29.model.Faculty;
@@ -25,7 +26,9 @@ public class FacultyController {
         return facultyService.addFaculty(faculty);
     }
 
+
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteFaculty (@PathVariable Long id) {
         facultyService.deleteFaculty(id);
     }

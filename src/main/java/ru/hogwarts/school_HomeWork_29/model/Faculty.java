@@ -1,11 +1,13 @@
 package ru.hogwarts.school_HomeWork_29.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@Data
 public class Faculty {
 
     //@Id

@@ -4,11 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school_HomeWork_29.Repository.FacultyRepository;
 import ru.hogwarts.school_HomeWork_29.model.Faculty;
-import ru.hogwarts.school_HomeWork_29.model.Student;
-
-import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Service
 public class FacultyService {

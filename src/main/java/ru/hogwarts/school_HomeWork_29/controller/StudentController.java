@@ -5,7 +5,6 @@ package ru.hogwarts.school_HomeWork_29.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school_HomeWork_29.model.Faculty;
 import ru.hogwarts.school_HomeWork_29.model.Student;
 import ru.hogwarts.school_HomeWork_29.service.StudentService;
 
@@ -57,11 +56,11 @@ public class StudentController {
     public Collection<Student> sortByAge (@RequestParam int age) {
         return studentService.sortByAge(age);
     }
-    @GetMapping("{id}/faculty")
-    public Faculty getStudentFaculty(@PathVariable Long id) {
-        Student student = studentService.findStudent(id);
-        return student.getFaculty();
-    }
+//    @GetMapping("{id}/faculty")
+//    public Faculty getStudentFaculty(@PathVariable Long id) {
+//        Student student = studentService.findStudent(id);
+//        return student.getFaculty();
+//    }
 
     @GetMapping("/getAllStudents")
     public ResponseEntity<Integer> getAllStudents() {

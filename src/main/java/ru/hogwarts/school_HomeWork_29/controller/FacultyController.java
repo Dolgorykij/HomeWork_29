@@ -51,11 +51,11 @@ public class FacultyController {
     public Collection<Faculty> findByNameOrColor (@RequestParam String name,@RequestParam String color) {
         return facultyService.findByNameOrColor(name, color);
     }
-    @GetMapping("{id}/students")
-    public Collection<Student> getFacultyStudents(@PathVariable Long id) {
-        Faculty faculty = facultyService.findFaculty(id);
-        return faculty.getStudents();
-    }
+//    @GetMapping("{id}/students")
+//    public Collection<Student> getFacultyStudents(@PathVariable Long id) {
+//        Faculty faculty = facultyService.findFaculty(id);
+//        return faculty.getStudents();
+//    }
     //@GetMapping("byStudent")
     //public Collection<Faculty> findByStudent_id (@RequestParam Long id) {
        // return facultyService.findByStudent_id(id);

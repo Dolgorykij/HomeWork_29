@@ -1,5 +1,6 @@
 package ru.hogwarts.school_HomeWork_29.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,8 +25,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -82,6 +82,19 @@ public class FacultyControllerWebMvcTest {
                 .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.color").value(color));
     }
+    @Test
+    public void addFacultyBadTest() throws Exception {
+        JSONObject badFacultyObject = new JSONObject();
+        badFacultyObject.put("name", "");
+        badFacultyObject.put("color", -1);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/faculty")
+                        .content(badFacultyObject.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Wrong name/color"));
+    }
 
     @Test
     public void deleteFacultyTest() throws Exception {
@@ -93,6 +106,20 @@ public class FacultyControllerWebMvcTest {
                 .andExpect(status().isNoContent());
 
         verify(facultyRepository, times(1)).deleteById(id);
+    }
+    @Test
+    public void deleteFacultyBadTest() throws Exception {
+        final Long badID = 100L;
+
+        when(facultyRepository.existsById(badID)).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/faculty/{id}", badID))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Faculty not found"));
+
+
+        verify(facultyRepository, times(1)).existsById(badID);
+        verify(facultyRepository, never()).deleteById(badID);
     }
 
     @Test
@@ -114,6 +141,19 @@ public class FacultyControllerWebMvcTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.color").value(color));
+    }
+    @Test
+    public void getFacultyBadTest() throws Exception {
+        final Long badId = 100L;
+
+        when(facultyRepository.findById(badId)).thenReturn(Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/faculty/{id}", badId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Faculty not found"));
+
+        verify(facultyRepository, times(1)).findById(badId);
     }
 
     @Test
@@ -148,5 +188,27 @@ public class FacultyControllerWebMvcTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.color").value(color));
+    }
+    @Test
+    public void editFacultyBadTest() throws Exception {
+        final Long badId = 100L;
+        final String name = "badName";
+        final String color = "badColor";
+
+        Faculty faculty = new Faculty();
+        faculty.setId(badId);
+        faculty.setName(name);
+        faculty.setColor(color);
+
+        when(facultyRepository.existsById(badId)).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/faculty")
+                        .content(new ObjectMapper().writeValueAsString(faculty))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Faculty not found"));
+
+        verify(facultyRepository, times(0)).save(any(Faculty.class));
     }
 }

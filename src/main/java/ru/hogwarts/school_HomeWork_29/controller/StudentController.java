@@ -5,6 +5,8 @@ package ru.hogwarts.school_HomeWork_29.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school_HomeWork_29.Exception.StudentNotFound;
+import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrAgeException;
 import ru.hogwarts.school_HomeWork_29.model.Student;
 import ru.hogwarts.school_HomeWork_29.service.StudentService;
 
@@ -76,6 +78,17 @@ public class StudentController {
     public ResponseEntity<List<Student>> getLastFiveStudents() {
         List<Student> lastStudents = studentService.getLastFiveStudents();
         return ResponseEntity.ok(lastStudents);
+    }
+
+    @ExceptionHandler(StudentNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNotFoundException(StudentNotFound e) {
+        return e.getMessage();
+    }
+    @ExceptionHandler(WrongNameOrAgeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleBadRequestException(WrongNameOrAgeException e) {
+        return e.getMessage();
     }
 
 

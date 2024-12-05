@@ -3,6 +3,10 @@ package ru.hogwarts.school_HomeWork_29.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school_HomeWork_29.Exception.FacultyNotFound;
+import ru.hogwarts.school_HomeWork_29.Exception.StudentNotFound;
+import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrAgeException;
+import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrColorException;
 import ru.hogwarts.school_HomeWork_29.model.Faculty;
 import ru.hogwarts.school_HomeWork_29.model.Student;
 import ru.hogwarts.school_HomeWork_29.service.FacultyService;
@@ -50,6 +54,17 @@ public class FacultyController {
     @GetMapping("byFaculty")
     public Collection<Faculty> findByNameOrColor (@RequestParam String name,@RequestParam String color) {
         return facultyService.findByNameOrColor(name, color);
+    }
+
+    @ExceptionHandler(FacultyNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNotFoundException(FacultyNotFound e) {
+        return e.getMessage();
+    }
+    @ExceptionHandler(WrongNameOrColorException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleBadRequestException(WrongNameOrColorException e) {
+        return e.getMessage();
     }
 //    @GetMapping("{id}/students")
 //    public Collection<Student> getFacultyStudents(@PathVariable Long id) {

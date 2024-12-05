@@ -2,6 +2,8 @@ package ru.hogwarts.school_HomeWork_29.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school_HomeWork_29.Exception.StudentNotFound;
+import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrAgeException;
 import ru.hogwarts.school_HomeWork_29.Repository.StudentRepository;
 import ru.hogwarts.school_HomeWork_29.model.Student;
 
@@ -19,11 +21,17 @@ public class StudentService {
     }
 
     public Student addStudent(Student student) {
-        return studentRepository.save(student);
+        if (student.getName() == null || student.getName().isBlank()) {
+            throw new WrongNameOrAgeException("Wrong name/age");
+        }
+        if (student.getAge() <= 0) {
+            throw new WrongNameOrAgeException("Wrong name/age");
+        }
+            return studentRepository.save(student);
     }
 
     public Student findStudent(long id) {
-        return studentRepository.findById(id).orElseThrow();
+        return studentRepository.findById(id).orElseThrow(() -> new StudentNotFound("Student not found"));
     }
 
     public Collection<Student> findAll () {
@@ -31,10 +39,16 @@ public class StudentService {
     }
 
     public Student editStudent(Student student) {
+        if (!studentRepository.existsById(student.getId())) {
+            throw new StudentNotFound("Student not found");
+        }
         return studentRepository.save(student);
     }
 
     public void deleteStudent(long id) {
+        if (!studentRepository.existsById(id)) {
+            throw new StudentNotFound("Student not found");
+        }
         studentRepository.deleteById(id);
     }
 

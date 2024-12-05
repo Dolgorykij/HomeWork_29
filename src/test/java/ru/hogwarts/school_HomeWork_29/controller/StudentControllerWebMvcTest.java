@@ -1,11 +1,11 @@
 package ru.hogwarts.school_HomeWork_29.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -24,8 +24,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -83,8 +82,24 @@ public class StudentControllerWebMvcTest {
     }
 
     @Test
+    public void addStudentBadTest() throws Exception {
+        JSONObject badStudentObject = new JSONObject();
+        badStudentObject.put("name", "");
+        badStudentObject.put("age", -1);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/student")
+                        .content(badStudentObject.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Wrong name/age"));
+    }
+
+
+    @Test
     public void deleteStudentTest() throws Exception {
         final Long id = 1L;
+        final Long badId = 100L;
 
         doNothing().when(studentRepository).deleteById(id);
 
@@ -92,6 +107,20 @@ public class StudentControllerWebMvcTest {
                 .andExpect(status().isNoContent());
 
         verify(studentRepository, times(1)).deleteById(id);
+    }
+    @Test
+    public void deleteStudentBadTest() throws Exception {
+        final Long badID = 100L;
+
+        when(studentRepository.existsById(badID)).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/student/{id}", badID))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Student not found"));
+
+
+        verify(studentRepository, times(1)).existsById(badID);
+        verify(studentRepository, never()).deleteById(badID);
     }
 
     @Test
@@ -113,6 +142,19 @@ public class StudentControllerWebMvcTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.age").value(age));
+    }
+    @Test
+    public void getStudentBadTest() throws Exception {
+        final Long badId = 100L;
+
+        when(studentRepository.findById(badId)).thenReturn(Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/student/{id}", badId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Student not found"));
+
+        verify(studentRepository, times(1)).findById(badId);
     }
 
     @Test
@@ -147,5 +189,27 @@ public class StudentControllerWebMvcTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.age").value(age));
+    }
+    @Test
+    public void editStudentBadTest() throws Exception {
+        final Long badId = 100L;
+        final String name = "badName";
+        final int age = 25;
+
+        Student student = new Student();
+        student.setId(badId);
+        student.setName(name);
+        student.setAge(age);
+
+        when(studentRepository.existsById(badId)).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/student")
+                        .content(new ObjectMapper().writeValueAsString(student))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Student not found"));
+
+        verify(studentRepository, times(0)).save(any(Student.class));
     }
 }

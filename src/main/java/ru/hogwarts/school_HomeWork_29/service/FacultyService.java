@@ -1,0 +1,64 @@
+package ru.hogwarts.school_HomeWork_29.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.hogwarts.school_HomeWork_29.Exception.FacultyNotFound;
+import ru.hogwarts.school_HomeWork_29.Exception.StudentNotFound;
+import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrColorException;
+import ru.hogwarts.school_HomeWork_29.Repository.FacultyRepository;
+import ru.hogwarts.school_HomeWork_29.model.Faculty;
+import java.util.*;
+
+
+@Service
+public class FacultyService {
+
+    @Autowired
+   private final FacultyRepository facultyRepository;
+
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
+
+    public Faculty addFaculty(Faculty faculty) {
+        if (faculty.getName() == null || faculty.getName().isBlank()) {
+            throw new WrongNameOrColorException("Wrong name/color");
+        }
+        if (faculty.getColor() == null || faculty.getColor().isBlank()) {
+            throw new WrongNameOrColorException("Wrong name/color");
+        }
+        return facultyRepository.save(faculty);
+    }
+
+    public Faculty findFaculty (long id) {
+        return facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFound("Faculty not found"));
+    }
+
+    public Faculty editFaculty (Faculty faculty) {
+        if (!facultyRepository.existsById(faculty.getId())) {
+            throw new FacultyNotFound("Faculty not found");
+        }
+        return facultyRepository.save(faculty);
+    }
+
+    public void deleteFaculty (long id) {
+        if (!facultyRepository.existsById(id)) {
+            throw new FacultyNotFound("Faculty not found");
+        }
+        facultyRepository.deleteById(id);
+    }
+
+    public Collection<Faculty> sortByColor(String color) {
+        return facultyRepository.findByColor(color);
+        //return faculties.values().stream()
+          //      .filter(faculty -> faculty.getColor().equals(color))
+            //    .collect(Collectors.toList());
+    }
+    public Collection <Faculty> findByNameOrColor (String name, String color) {
+        return facultyRepository.findFacultyByNameIgnoreCaseOrColorIgnoreCase(name,color);
+    }
+    //public Collection<Faculty> findByStudent (Long id) {
+        //return facultyRepository.findByStudent_id(id);
+    //}
+    //
+}

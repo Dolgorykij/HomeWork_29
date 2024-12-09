@@ -8,6 +8,7 @@ import ru.hogwarts.school_HomeWork_29.Exception.StudentNotFound;
 import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrAgeException;
 import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrColorException;
 import ru.hogwarts.school_HomeWork_29.model.Faculty;
+import ru.hogwarts.school_HomeWork_29.model.FacultyDTO;
 import ru.hogwarts.school_HomeWork_29.model.Student;
 import ru.hogwarts.school_HomeWork_29.service.FacultyService;
 
@@ -26,8 +27,8 @@ public class FacultyController {
     }
 
     @PostMapping
-    public Faculty addFaculty (@RequestBody Faculty faculty) {
-        return facultyService.addFaculty(faculty);
+    public Faculty addFaculty (@RequestBody FacultyDTO facultyDTO) {
+        return facultyService.addFaculty(facultyDTO);
     }
 
 

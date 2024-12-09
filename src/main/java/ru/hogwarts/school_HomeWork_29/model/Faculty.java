@@ -1,5 +1,6 @@
 package ru.hogwarts.school_HomeWork_29.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class Faculty {
     private String color;
 
     @OneToMany (mappedBy = "faculty")
+    @JsonManagedReference
     private Collection<Student> students;
 
     public Collection<Student> getStudents() {

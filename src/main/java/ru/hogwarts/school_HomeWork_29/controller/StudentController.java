@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school_HomeWork_29.Exception.StudentNotFound;
 import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrAgeException;
 import ru.hogwarts.school_HomeWork_29.model.Student;
+import ru.hogwarts.school_HomeWork_29.model.StudentDTO;
 import ru.hogwarts.school_HomeWork_29.service.StudentService;
 
 import java.util.Collection;
@@ -25,8 +26,8 @@ public class StudentController {
     }
 
     @PostMapping
-    public Student addStudent (@RequestBody Student student) {
-        return studentService.addStudent(student);
+    public Student addStudent (@RequestBody StudentDTO studentDTO) {
+        return studentService.addStudent(studentDTO);
     }
 
     @DeleteMapping("{id}")

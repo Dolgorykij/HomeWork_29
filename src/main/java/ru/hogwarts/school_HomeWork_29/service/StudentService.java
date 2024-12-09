@@ -1,17 +1,25 @@
 package ru.hogwarts.school_HomeWork_29.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school_HomeWork_29.Exception.StudentNotFound;
 import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrAgeException;
 import ru.hogwarts.school_HomeWork_29.Repository.StudentRepository;
+import ru.hogwarts.school_HomeWork_29.model.Faculty;
 import ru.hogwarts.school_HomeWork_29.model.Student;
+import ru.hogwarts.school_HomeWork_29.model.StudentDTO;
 
 import java.util.Collection;
 import java.util.List;
 
 @Service
 public class StudentService {
+
+    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
+
 
     @Autowired
     private final StudentRepository studentRepository;
@@ -20,18 +28,26 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public Student addStudent(Student student) {
-        if (student.getName() == null || student.getName().isBlank()) {
+    public Student addStudent(StudentDTO studentDTO) {
+        if (studentDTO.getName() == null || studentDTO.getName().isBlank()) {
+            logger.warn("Некорректное имя: {}", studentDTO.getName());
             throw new WrongNameOrAgeException("Wrong name/age");
         }
-        if (student.getAge() <= 0) {
+        if (studentDTO.getAge() <= 0) {
+            logger.warn("Некорректный возраст: {}", studentDTO.getAge());
             throw new WrongNameOrAgeException("Wrong name/age");
         }
+        Student student = new Student();
+        student.setName(studentDTO.getName());
+        student.setAge(studentDTO.getAge());
+        logger.info("Студент добавлен: {}",student);
             return studentRepository.save(student);
     }
 
     public Student findStudent(long id) {
-        return studentRepository.findById(id).orElseThrow(() -> new StudentNotFound("Student not found"));
+        return studentRepository.findById(id).orElseThrow(() -> { logger.warn("Студент с таким ID {} not found", id);
+                    return new StudentNotFound("Student not found");
+                });
     }
 
     public Collection<Student> findAll () {
@@ -40,15 +56,19 @@ public class StudentService {
 
     public Student editStudent(Student student) {
         if (!studentRepository.existsById(student.getId())) {
+            logger.warn("Студент с таким ID {} not found", student.getId());
             throw new StudentNotFound("Student not found");
         }
+        logger.info("Студент {} был изменен", student);
         return studentRepository.save(student);
     }
 
     public void deleteStudent(long id) {
         if (!studentRepository.existsById(id)) {
+            logger.warn("Студент с таким ID {} not found", id);
             throw new StudentNotFound("Student not found");
         }
+        logger.info("Студент с ID {} был удален", id);
         studentRepository.deleteById(id);
     }
 

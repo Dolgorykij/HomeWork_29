@@ -1,0 +1,14 @@
+package ru.hogwarts.school_HomeWork_29.Repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import ru.hogwarts.school_HomeWork_29.model.Faculty;
+
+import java.util.Collection;
+import java.util.List;
+@Repository
+public interface FacultyRepository extends JpaRepository<Faculty, Long> {
+//
+    Collection<Faculty> findByColor (String color);
+    Collection<Faculty> findFacultyByNameIgnoreCaseOrColorIgnoreCase (String name, String color);
+}

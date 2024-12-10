@@ -81,6 +81,16 @@ public class StudentController {
         return ResponseEntity.ok(lastStudents);
     }
 
+    @GetMapping("/startsWithA")
+    public ResponseEntity<List<Student>> getStudStartWithA () {
+        List<Student> startsWithA = studentService.getStudStartWithA();
+        return ResponseEntity.ok(startsWithA);
+    }
+    @GetMapping("/getAverageAgeByStream")
+    public double getAverageAgeByStream() {
+        return studentService.getAverageAgeByStream();
+    }
+
     @ExceptionHandler(StudentNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFoundException(StudentNotFound e) {

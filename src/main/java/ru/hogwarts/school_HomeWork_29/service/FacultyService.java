@@ -11,6 +11,7 @@ import ru.hogwarts.school_HomeWork_29.model.Faculty;
 import ru.hogwarts.school_HomeWork_29.model.FacultyDTO;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 
 @Service
@@ -74,6 +75,21 @@ public class FacultyService {
     }
     public Collection <Faculty> findByNameOrColor (String name, String color) {
         return facultyRepository.findFacultyByNameIgnoreCaseOrColorIgnoreCase(name,color);
+    }
+    public Faculty getLongestFaculty() {
+        return facultyRepository.findAll().stream()
+                .max(Comparator.comparingInt(faculty -> faculty.getName().length()))
+                .orElseThrow(() -> new FacultyNotFound("No faculties found"));
+    }
+    public int sum() {
+//        int sum = Stream.iterate(1, a -> a + 1)
+//                .limit(1_000_000)
+//                .reduce(0, (a, b) -> a + b);
+        int sum = 0;
+        for (int i = 1; i <= 1000000; i++) {
+            sum += i;
+        }
+        return sum;
     }
     //public Collection<Faculty> findByStudent (Long id) {
         //return facultyRepository.findByStudent_id(id);

@@ -11,7 +11,9 @@ import ru.hogwarts.school_HomeWork_29.model.Student;
 import ru.hogwarts.school_HomeWork_29.model.StudentDTO;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -38,7 +40,7 @@ public class StudentService {
         Student student = new Student();
         student.setName(studentDTO.getName());
         student.setAge(studentDTO.getAge());
-        logger.info("Студент добавлен: {}",student);
+        logger.info("Студент добавлен: {}",student.getName());
             return studentRepository.save(student);
     }
 
@@ -100,6 +102,22 @@ public class StudentService {
     public List<Student> getLastFiveStudents () {
         logger.info("Последние 5 студентов: ");
         return studentRepository.getLastFiveStudents();
+    }
+
+    public List<Student> getStudStartWithA () {
+        return studentRepository.findAll().stream()
+                .filter(student -> student.getName().startsWith("A"))
+                .sorted(Comparator.comparing(student ->
+                        student.getName().substring(0, 1).
+                                toUpperCase() + student.getName().substring(1).toLowerCase()
+                ))
+                .collect(Collectors.toList());
+    }
+    public double getAverageAgeByStream() {
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElseThrow();
     }
     //private Sort sortByAgeHelp () {
       //  return new Sort();

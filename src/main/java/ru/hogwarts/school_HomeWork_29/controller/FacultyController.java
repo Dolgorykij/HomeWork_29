@@ -56,6 +56,16 @@ public class FacultyController {
     public Collection<Faculty> findByNameOrColor (@RequestParam String name,@RequestParam String color) {
         return facultyService.findByNameOrColor(name, color);
     }
+    @GetMapping("/getLongestFaculty")
+    public ResponseEntity<Faculty> getLongestFaculty() {
+        Faculty faculty = facultyService.getLongestFaculty();
+        return ResponseEntity.ok(faculty);
+    }
+    @GetMapping("/sum")
+    public ResponseEntity<Integer> sum() {
+        int sum = facultyService.sum();
+        return ResponseEntity.ok(sum);
+    }
 
     @ExceptionHandler(FacultyNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

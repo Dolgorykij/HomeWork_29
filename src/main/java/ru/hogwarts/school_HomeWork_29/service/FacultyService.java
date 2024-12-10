@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school_HomeWork_29.Exception.FacultyNotFound;
-import ru.hogwarts.school_HomeWork_29.Exception.StudentNotFound;
 import ru.hogwarts.school_HomeWork_29.Exception.WrongNameOrColorException;
 import ru.hogwarts.school_HomeWork_29.Repository.FacultyRepository;
 import ru.hogwarts.school_HomeWork_29.model.Faculty;
@@ -28,11 +27,11 @@ public class FacultyService {
 
     public Faculty addFaculty(FacultyDTO facultyDTO) {
         if (facultyDTO.getName() == null || facultyDTO.getName().isBlank()) {
-            logger.warn("Некорректное имя: {}", facultyDTO.getName());
+            logger.error("Некорректное имя: {}", facultyDTO.getName());
             throw new WrongNameOrColorException("Wrong name/color");
         }
         if (facultyDTO.getColor() == null || facultyDTO.getColor().isBlank()) {
-            logger.warn("Некорректный цвет: {}", facultyDTO.getColor());
+            logger.error("Некорректный цвет: {}", facultyDTO.getColor());
             throw new WrongNameOrColorException("Wrong name/color");
         }
         Faculty faculty = new Faculty();
@@ -43,14 +42,14 @@ public class FacultyService {
     }
 
     public Faculty findFaculty (long id) {
-        return facultyRepository.findById(id).orElseThrow(() -> { logger.warn("Факультет с таким ID {} not found", id);
+        return facultyRepository.findById(id).orElseThrow(() -> { logger.error("Факультет с таким ID {} not found", id);
         return new FacultyNotFound("Faculty not found");
         });
     }
 
     public Faculty editFaculty (Faculty faculty) {
         if (!facultyRepository.existsById(faculty.getId())) {
-            logger.warn("Факультет с таким ID {} not found", faculty.getId());
+            logger.error("Факультет с таким ID {} not found", faculty.getId());
             throw new FacultyNotFound("Faculty not found");
         }
         logger.info("Факультет {} был изменен", faculty);
@@ -59,7 +58,7 @@ public class FacultyService {
 
     public void deleteFaculty (long id) {
         if (!facultyRepository.existsById(id)) {
-            logger.warn("Факультет с таким ID {} not found", id);
+            logger.error("Факультет с таким ID {} not found", id);
             throw new FacultyNotFound("Faculty not found");
         }
         logger.info("Факультет с ID {} был удален", id);
@@ -67,6 +66,7 @@ public class FacultyService {
     }
 
     public Collection<Faculty> sortByColor(String color) {
+        logger.info("Факультеты с таким цветом: {}", color);
         return facultyRepository.findByColor(color);
         //return faculties.values().stream()
           //      .filter(faculty -> faculty.getColor().equals(color))

@@ -1,5 +1,7 @@
 package ru.hogwarts.school_HomeWork_29.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 @Transactional
 public class AvatarService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AvatarService.class);
 
     //@Value("${students.avatar.dir.path}")
     private String avatarsDir = "avatars";
@@ -53,10 +57,17 @@ public class AvatarService {
         avatar.setMediaType(file.getContentType());
         avatar.setData(file.getBytes());
 
+        logger.info("Avatar успешно сохранен: {}", avatar);
         avatarRepository.save(avatar);
     }
     public Avatar findAvatar (Long studentId) {
-        return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
+        Avatar avatar = avatarRepository.findByStudentId(studentId).orElse(new Avatar());
+        if (avatar.getId() != null) {
+            logger.info("Avatar найден: {}", avatar);
+        } else {
+            logger.error("У студента с таким ID: {} аватар не найден", studentId);
+        }
+        return avatar;
     }
 
 //

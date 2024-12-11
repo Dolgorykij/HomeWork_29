@@ -90,6 +90,45 @@ public class StudentController {
     public double getAverageAgeByStream() {
         return studentService.getAverageAgeByStream();
     }
+    @GetMapping("/print-parallel")
+    public void printParallel () {
+        List <Student> students = studentService.getAllStudentNoInteger();
+
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        Thread thread1 = new Thread(() -> {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        });
+
+        Thread thread2 = new Thread(() -> {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        });
+        thread1.start();
+        thread2.start();
+    }
+
+    @GetMapping("/print-synchronized")
+    public void printSynchronized () {
+        List<Student> students = studentService.getAllStudentNoInteger();
+
+        studentService.printStudentName(students.get(0).getName());
+        studentService.printStudentName(students.get(1).getName());
+
+        Thread thread1 = new Thread(() -> {
+            studentService.printStudentName(students.get(2).getName());
+            studentService.printStudentName(students.get(3).getName());
+        });
+
+        Thread thread2 = new Thread(() -> {
+            studentService.printStudentName(students.get(4).getName());
+            studentService.printStudentName(students.get(5).getName());
+        });
+        thread1.start();
+        thread2.start();
+    }
 
     @ExceptionHandler(StudentNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

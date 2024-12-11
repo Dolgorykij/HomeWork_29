@@ -93,6 +93,9 @@ public class StudentService {
         logger.info("Список всех студентов: ");
         return studentRepository.getAllStudents();
     }
+    public List<Student> getAllStudentNoInteger () {
+        return studentRepository.findAll();
+    }
 
     public Integer getAverageAge () {
         logger.info("Avarage age of students: ");
@@ -119,6 +122,10 @@ public class StudentService {
                 .average()
                 .orElseThrow();
     }
+    public synchronized void printStudentName(String name) {
+        System.out.println(name);
+    }
+
     //private Sort sortByAgeHelp () {
       //  return new Sort();
     //}
